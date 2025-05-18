@@ -119,7 +119,7 @@ class DINO(torch.nn.Module):
         self.embed_dim = self.model.model.embed_dim
         self.norm = Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> Dict:
         ''' input: x in [0, 1]; output: dict of activations '''
         x = F.interpolate(x, self.img_resolution, mode='area')
         x = self.norm(x)
