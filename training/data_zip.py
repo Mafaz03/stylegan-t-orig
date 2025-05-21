@@ -144,8 +144,6 @@ class Dataset(torch.utils.data.Dataset):
                 self._label_shape = [int(np.max(raw_labels)) + 1]
             elif raw_labels.dtype.type == np.str_:
                 self._label_shape = [1]
-            elif raw_labels.dtype.type == np.str_:
-                self._label_shape = [1]
             else:
                 self._label_shape = raw_labels.shape[1:]
         return list(self._label_shape)
