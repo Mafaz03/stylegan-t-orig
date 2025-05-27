@@ -16,10 +16,11 @@ import open_clip
 from timm.data import OPENAI_CLIP_MEAN, OPENAI_CLIP_STD
 
 
-class CLIP(nn.Module):
+class model(nn.Module):
     def __init__(self, name='ViT-L/14', pretrained='openai'):
         super().__init__()
-        self.model = open_clip.create_model(name, pretrained=pretrained)
+        self.model, _, _ = open_clip.create_model_and_transforms('ViT-L-14', pretrained='openai')
+        self.tokenizer = open_clip.get_tokenizer('ViT-L-14')
         self.model = self.model.eval().requires_grad_(False)
         self.img_resolution = self.model.visual.image_size[0]
         self.norm = Normalize(OPENAI_CLIP_MEAN, OPENAI_CLIP_STD)
@@ -38,7 +39,7 @@ class CLIP(nn.Module):
         image_features = F.normalize(image_features, dim=-1)
         return image_features
 
-    def encode_text(self, texts: list[str]) -> torch.Tensor:
+    def encode_texts(self, texts: list[str]) -> torch.Tensor:
         text = open_clip.tokenize(texts).to(self.device)
         text_features = self.model.encode_text(text)
         text_features = F.normalize(text_features, dim=-1)
